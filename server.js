@@ -1,14 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const app = express();
-
-const db = [
-  { id: '1', author: 'John Doe', text: 'This company is worth every coin!' },
-  { id: '2', author: 'Amanda Doe', text: 'They really know how to make you happy.' },
-  { id: '3', author: 'Emily Johnson', text: 'Lorem ipsum.' },
-  { id: '4', author: 'Michael Williams', text: 'Ipsum Lorem' },
-  { id: '5', author: 'Sarah Brown', text: 'Hello World.' },
-];
+const db = require('./db');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -19,17 +12,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/testimonials', (req, res) => {
-  res.json(db);
+  res.json(db.testimonials);
 });
 
 app.get('/testimonials/random', (req, res) => {
-  const randomIndex = Math.floor(Math.random() * db.length);
-  res.json(db[randomIndex]);
+  const randomIndex = Math.floor(Math.random() * db.testimonials.length);
+  res.json(db.testimonials[randomIndex]);
 });
 
 app.get('/testimonials/:id', (req, res) => {
   const id = req.params.id;
-  const testimonial = db.find((item) => item.id === id);
+  const testimonial = db.testimonials.find((item) => item.id === id);
   if (!testimonial) {
     return res.status(404).json({ message: 'Testimonial not found' });
   }
@@ -43,27 +36,27 @@ app.post('/testimonials', (req, res) => {
     author,
     text,
   };
-  db.push(newTestimonial);
+  db.testimonials.push(newTestimonial);
   res.status(201).json({ message: 'OK' });
 });
 
 app.put('/testimonials/:id', (req, res) => {
   const id = req.params.id;
-  const index = db.findIndex((item) => item.id === id);
+  const index = db.testimonials.findIndex((item) => item.id === id);
   if (index === -1) {
     return res.status(404).json({ message: 'Testimonial not found' });
   }
-  db[index] = { ...db[index], ...req.body, id: db[index].id };
+  db.testimonials[index] = { ...db.testimonials[index], ...req.body, id: db.testimonials[index].id };
   res.json({ message: 'OK' });
 });
 
 app.delete('/testimonials/:id', (req, res) => {
   const id = req.params.id;
-  const index = db.findIndex((item) => item.id === id);
+  const index = db.testimonials.findIndex((item) => item.id === id);
   if (index === -1) {
     return res.status(404).json({ message: 'Testimonial not found' });
   }
-  const deleted = db.splice(index, 1);
+  const deleted = db.testimonials.splice(index, 1);
   res.json({ message: 'OK' });
 });
 
