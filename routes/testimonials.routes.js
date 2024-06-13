@@ -19,7 +19,6 @@ router.route('/testimonials/:id').get((req, res) => {
     return res.status(404).json({ message: 'Testimonial not found' });
   }
   res.json(testimonial);
-  db;
 });
 
 router.route('/testimonials').post((req, res) => {

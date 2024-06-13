@@ -19,7 +19,6 @@ router.route('/concerts/:id').get((req, res) => {
     return res.status(404).json({ message: 'concert not found' });
   }
   res.json(concert);
-  db;
 });
 
 router.route('/concerts').post((req, res) => {

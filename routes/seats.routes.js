@@ -19,19 +19,28 @@ router.route('/seats/:id').get((req, res) => {
     return res.status(404).json({ message: 'seat not found' });
   }
   res.json(seat);
-  db;
 });
 
 router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body;
-  const newseat = {
+  const seatTaken = db.seats.some(
+    (item) =>
+      parseInt(item.day) === parseInt(day) &&
+      parseInt(item.seat) === parseInt(seat)
+  );
+  if (seatTaken) {
+    return res.status(400).json({ message: 'The slot is already taken...' });
+  };
+
+  const newSeat = {
     id: uuidv4(),
-    day,
-    seat,
+    day: parseInt(day),
+    seat: parseInt(seat),
     client,
     email,
   };
-  db.seats.push(newseat);
+  
+  db.seats.push(newSeat);
   res.status(201).json({ message: 'OK' });
 });
 
