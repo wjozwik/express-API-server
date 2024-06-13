@@ -32,7 +32,6 @@ export const loadConcertsRequest = () => {
     try {
 
       let res = await axios.get(`${API_URL}/concerts`);
-      await new Promise((resolve, reject) => setTimeout(resolve, 2000));
       dispatch(loadConcerts(res.data));
       dispatch(endRequest());
 
@@ -68,5 +67,5 @@ export default function reducer(statePart = initialState, action = {}) {
       return { ...statePart, request: { pending: false, error: action.error, success: false } };
     default:
       return statePart;
-  }
-}
+  };
+};
